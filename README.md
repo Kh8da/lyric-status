@@ -55,7 +55,7 @@
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/lyric-status.git
+git clone https://github.com/Kh8da/lyric-status.git
 cd lyric-status
 ```
 
