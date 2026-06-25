@@ -76,13 +76,12 @@ Open the dashboard → **Settings** tab → paste your Discord user token → **
 
 <br/>
 
-1. Open Discord **(browser or desktop app)**
+1. Open Discord in **(Browser)**
 2. Press **F12** to open DevTools
-3. Go to the **Network** tab
-4. In the filter box type `science`
-5. Click any request that appears
-6. Go to **Headers** → scroll to **Request Headers**
-7. Copy the value next to **`Authorization`** — that's your token
+3. Go to the **Application** tab
+4. Open local storage and select https://discord.com
+5. Scroll down till you find **token**
+6. Copy the value — that's your token
 
 > ⚠️ **Your token is the password to your account. Never share it, never paste it anywhere except this app. The token is stored locally in `.config.json` and never leaves your machine.**
 
