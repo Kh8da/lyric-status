@@ -35,13 +35,8 @@
 > Dashboard running in browser while Spotify is playing
 
 ```
-╔══════════════════════════════════════════╗
-║  ▶  Euphoria — Nazli Mcfian & Isam      ║
-║     0:42 ████████░░░░░░░░░░░░░  3:08    ║
-║                                          ║
-║   "and i know that i should let you go" ║
-║         Pushing to Discord               ║
-╚══════════════════════════════════════════╝
+<img width="1921" height="946" alt="image" src="https://github.com/user-attachments/assets/c20f3858-b249-48db-9cb7-3832103f635b" />
+
 ```
 
 ---
