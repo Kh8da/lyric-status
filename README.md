@@ -34,10 +34,9 @@
 
 > Dashboard running in browser while Spotify is playing
 
-```
-<img width="1921" height="946" alt="image" src="https://github.com/user-attachments/assets/c20f3858-b249-48db-9cb7-3832103f635b" />
+<img width="1914" height="939" alt="image" src="https://github.com/user-attachments/assets/65f3ec77-2987-49d1-91cf-214ab76c495a" />
 
-```
+
 
 ---
 
