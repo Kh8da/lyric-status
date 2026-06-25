@@ -75,7 +75,14 @@ Open the dashboard → **Settings** tab → paste your Discord user token → **
 <summary><b>How to find your Discord token</b></summary>
 
 <br/>
+First Method:
+1. Open Discord in your browser or desktop app
+2. Press **F12** to open DevTools
+3. Go to the **Network** tab
+4. Filter by `science`
+5. Click any request → **Headers** → copy the value next to `Authorization`
 
+Second Method:
 1. Open Discord in **(Browser)**
 2. Press **F12** to open DevTools
 3. Go to the **Application** tab
