@@ -1,0 +1,27 @@
+{
+  "name": "lyric-status",
+  "version": "1.0.0",
+  "description": "Live song lyrics pushed to your Discord custom status — reads from Windows SMTC, no API keys needed",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "discord",
+    "lyrics",
+    "status",
+    "spotify",
+    "lrclib",
+    "smtc",
+    "windows",
+    "music"
+  ],
+  "author": "kh8da",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.17.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

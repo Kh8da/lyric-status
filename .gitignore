@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Auto-generated config & cache (contain Discord token — never commit)
+.config.json
+.lyrics.json
+.imgur-cache.json
+.history.json
+
+# Built helper binaries
+track-helper/*.exe
+track-helper/*.dll
+track-helper/*.pdb
+track-helper/*.deps.json
+track-helper/*.runtimeconfig.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.user

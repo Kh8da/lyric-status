@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyric Status</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<!-- ── Credit badge ─────────────────────────────────────────────────────── -->
+<a class="credit-badge" href="https://guns.lol/Pxrsa" target="_blank" rel="noopener">
+  <span class="credit-inner">
+    <span class="credit-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </span>
+    <span class="credit-text">Made by <strong>kh8da</strong></span>
+    <span class="credit-arrow">↗</span>
+  </span>
+</a>
+
+<!-- ── Sidebar ───────────────────────────────────────────────────────────── -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-pulse"></div>
+    <span class="logo-text">Lyric Status</span>
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn active" data-tab="now">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg>
+      Now Playing
+    </button>
+    <button class="nav-btn" data-tab="lyrics">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      Lyrics
+    </button>
+    <button class="nav-btn" data-tab="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      Settings
+    </button>
+  </div>
+  <div class="sidebar-status">
+    <div class="status-pill" id="discord-status-pill">
+      <div class="pill-dot" id="discord-dot"></div>
+      <span id="discord-status-text">Discord</span>
+    </div>
+    <div class="status-pill" id="track-status-pill">
+      <div class="pill-dot" id="track-dot"></div>
+      <span id="track-status-text">No track</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Main content ───────────────────────────────────────────────────────── -->
+<main class="content">
+
+  <!-- ══ NOW PLAYING TAB ══ -->
+  <div class="tab-panel active" id="tab-now">
+
+    <div class="now-card" id="now-card">
+      <div class="now-art-wrap">
+        <img id="now-art" src="" alt="" onerror="this.style.opacity=0" onload="this.style.opacity=1">
+        <div class="now-art-placeholder" id="now-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+        </div>
+        <div class="now-eq" id="now-eq">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="now-meta">
+        <div class="now-track" id="now-track">Nothing playing</div>
+        <div class="now-artist" id="now-artist">—</div>
+        <div class="now-album" id="now-album"></div>
+        <div class="progress-row">
+          <span class="prog-time" id="prog-cur">0:00</span>
+          <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+          <span class="prog-time" id="prog-end">0:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live lyric -->
+    <div class="lyric-stage" id="lyric-stage">
+      <div class="lyric-line" id="lyric-line">
+        <span class="lyric-empty">Waiting for lyrics…</span>
+      </div>
+      <div class="lyric-sub" id="lyric-sub"></div>
+    </div>
+
+    <!-- Discord status preview -->
+    <div class="dc-preview" id="dc-preview">
+      <div class="dc-preview-label">Discord custom status</div>
+      <div class="dc-preview-text" id="dc-preview-text">—</div>
+    </div>
+
+    <div class="no-track-notice" id="no-track-notice">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <p>No track detected. Start playing something on Spotify, a browser, or any media player.</p>
+      <p class="hint">Make sure <code>track-helper/get-track.exe</code> is built. See the README.</p>
+    </div>
+
+  </div>
+
+  <!-- ══ LYRICS TAB ══ -->
+  <div class="tab-panel" id="tab-lyrics">
+
+    <div class="lyrics-track-header" id="lyrics-track-header">
+      <div class="lth-info">
+        <div class="lth-title" id="lth-title">No track</div>
+        <div class="lth-artist" id="lth-artist">—</div>
+      </div>
+      <div class="lth-source" id="lth-source"></div>
+    </div>
+
+    <!-- Search -->
+    <div class="section-label">Search LRCLib</div>
+    <div class="search-row">
+      <div class="input-wrap flex1">
+        <input type="text" id="lyric-search-q" placeholder="Artist name and song title…" autocomplete="off">
+      </div>
+      <button class="btn btn-green" id="btn-lyric-search" onclick="doLyricSearch()">Search</button>
+    </div>
+
+    <div class="search-results" id="search-results"></div>
+
+    <!-- Manual editor -->
+    <div class="section-label" style="margin-top:24px;">
+      Manual lyrics
+      <button class="btn-sm btn-outline" onclick="toggleManual()">Edit</button>
+    </div>
+    <div class="manual-wrap" id="manual-wrap">
+      <p class="hint">Paste synced LRC format (timestamps required for sync) or plain text (no sync). Format: <code>[0:12.34] Line of lyrics</code></p>
+      <div class="manual-fields">
+        <input type="text" id="manual-title" placeholder="Track title" autocomplete="off">
+        <input type="text" id="manual-artist" placeholder="Artist" autocomplete="off">
+      </div>
+      <textarea id="manual-lyrics" rows="12" placeholder="[0:05.00] First lyric line&#10;[0:09.50] Second lyric line&#10;[0:14.20] And so on…"></textarea>
+      <div class="manual-actions">
+        <button class="btn btn-green" onclick="saveManualLyrics()">Save &amp; Apply</button>
+        <button class="btn btn-outline" onclick="deleteCurrentLyrics()">Delete Lyrics</button>
+      </div>
+    </div>
+
+    <!-- Current lines preview -->
+    <div class="section-label" style="margin-top:24px;" id="lines-label" hidden>Current lines</div>
+    <div class="lines-preview" id="lines-preview"></div>
+
+  </div>
+
+  <!-- ══ SETTINGS TAB ══ -->
+  <div class="tab-panel" id="tab-settings">
+
+    <div class="settings-section">
+      <div class="section-label">Discord</div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-title">User token</div>
+          <div class="setting-desc">Your Discord user token. Never share this with anyone.</div>
+        </div>
+        <div class="token-input-wrap">
+          <div class="input-wrap">
+            <input type="password" id="dc-token-input" placeholder="Token" autocomplete="off" spellcheck="false">
+            <button class="eye-btn" onclick="toggleEye()">
+              <svg id="eye-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <button class="btn btn-green" onclick="saveToken()" style="margin-top:8px;width:100%">Save token</button>
+          <p class="hint" style="margin-top:8px;">
+            How to find: Discord → F12 → Network → filter <code>science</code> → click a request → Headers → <code>Authorization</code>
+          </p>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-title">Gateway user</div>
+          <div class="setting-desc">Connected Discord account</div>
+        </div>
+        <div class="setting-value" id="gateway-user-val">—</div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="section-label">Behaviour</div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-title">Lyric status</div>
+          <div class="setting-desc">Push each lyric line to your Discord custom status</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="tog-lyric" onchange="saveSetting('lyricStatus', this.checked)">
+          <div class="sw-track"></div><div class="sw-thumb"></div>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-title">Clear on pause</div>
+          <div class="setting-desc">Remove status when playback pauses</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="tog-pause" onchange="saveSetting('clearOnPause', this.checked)">
+          <div class="sw-track"></div><div class="sw-thumb"></div>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-title">Title prefix</div>
+          <div class="setting-desc">Prepend "♪ Song — " before each lyric line</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="tog-prefix" onchange="saveSetting('titlePrefix', this.checked)">
+          <div class="sw-track"></div><div class="sw-thumb"></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="section-label">Actions</div>
+      <div class="action-row">
+        <button class="btn btn-outline" onclick="clearDiscordNow()">Clear Discord status now</button>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
