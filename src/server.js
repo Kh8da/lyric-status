@@ -1,6 +1,5 @@
 /**
  * Lyric Status — server.js
- * Lyric + Discord status logic ported directly from widget-v3/bridge.js
  */
 "use strict";
 
@@ -51,6 +50,13 @@ let currentLyricLine = "";
 let lyricsTrackKey   = "";
 let lyricTimer       = null;
 let lyricsFetching   = false;
+
+// Stable position baseline for the lyric timer.
+// Updated by every poll but only ever moves FORWARD — prevents the
+// integer-second snap-back that caused re-firing of previous lines.
+let tickBaseMs   = 0;   // track position in ms at last accepted poll
+let tickBaseTime = 0;   // wall-clock ms when that snapshot was taken
+let tickHwMs     = 0;   // high-water mark — posMs never goes below this
 
 // ─── HTTPS helpers (from bridge.js) ──────────────────────────────────────────
 
@@ -339,12 +345,30 @@ function loadStoredLyrics(name, artist) {
   console.log(`  ♪ Loaded ${currentLyrics.length} stored lines`);
 }
 
+function setTickBaseline(positionSec) {
+  const newMs = positionSec * 1000;
+  // Only accept if it's at or ahead of the high-water mark.
+  // This silently ignores integer-second rounding regressions.
+  if (newMs >= tickHwMs) {
+    tickBaseMs   = newMs;
+    tickBaseTime = Date.now();
+  }
+}
+
 function scheduleLyricTick() {
   if (lyricTimer) clearInterval(lyricTimer);
   lyricTimer = setInterval(() => {
     if (isPaused || !lastTrack) return;
-    const elapsed = (Date.now() - (lastTrack.readAt || Date.now())) / 1000;
-    const posMs   = (lastTrack.position + elapsed) * 1000;
+
+    // Compute raw position from our stable baseline (not lastTrack.readAt
+    // which resets every poll and causes snap-back to the previous line).
+    const raw   = tickBaseMs + (Date.now() - tickBaseTime);
+    // Enforce forward-only movement via high-water mark
+    const posMs = Math.max(raw, tickHwMs);
+    tickHwMs    = posMs;
+
+    if (!currentLyrics.length) return;
+
     let line = "";
     for (const l of currentLyrics) {
       if (l.time <= posMs) line = l.text;
@@ -483,7 +507,10 @@ async function poll() {
     if (config.clearOnPause) setDiscordCustomStatus(null);
   } else if (!track.paused && isPaused) {
     isPaused         = false;
-    currentLyricLine = "";  // re-sync from current position on resume
+    currentLyricLine = "";
+    // On resume, reset high-water mark to current position so we
+    // don't hold a stale pre-pause value.
+    tickHwMs = track.position * 1000;
   }
 
   if (songChanged) {
@@ -491,12 +518,19 @@ async function poll() {
     lyricsTrackKey   = "";
     currentLyricLine = "";
     currentLyrics    = [];
+    // New song — full baseline reset
+    tickBaseMs   = track.position * 1000;
+    tickBaseTime = Date.now();
+    tickHwMs     = tickBaseMs;
     const key = lyricsKey(track.name, track.artist);
     if (lyricsStore[key]?.lines?.length) {
       loadStoredLyrics(track.name, track.artist);
     } else {
       startLyricSync(track);
     }
+  } else {
+    // Every poll: try to advance the baseline (only accepted if >= hwm)
+    setTickBaseline(track.position);
   }
 
   lastTrack = track;
